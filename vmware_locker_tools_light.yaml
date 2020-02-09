@@ -1,0 +1,18 @@
+# Install this if you have trouble with the error: No space left on device
+# Source: https://blog.friedlandreas.net/2018/05/vmware-upgrade-errno-28-no-space-left-on-device/
+---
+- name: Create a VM from a template
+  hosts: esxi
+  vars:
+    url: https://hostupdate.vmware.com/software/VUM/PRODUCTION/main/esx/vmw/vib20/tools-light/VMware_locker_tools-light_{{ version }}.vib
+    filename: VMware_locker_tools-light.vib
+  
+  tasks:
+    - name: Download VMware_locker_tools-light
+      get_url: 
+        url: "{{ url }}"
+        dest: /tmp/"{{ filename }}"
+        validate_certs: no
+      
+    - name: Install VMware_locker_tools-light
+      command: esxcli software vib install -f -v /tmp/{{ filename }}

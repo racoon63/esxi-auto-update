@@ -1,0 +1,26 @@
+---
+hosts: esxi
+---
+- name: Update esxi to latest version
+  hosts: esxi
+  gather_facts: no
+
+  tasks:
+    - name: Get current firmware version
+      command: esxcli system version get
+      register: c_version
+
+    - debug:
+        var: c_version.stdout_lines
+
+    - name: Disable firewall
+      command: esxcli network firewall ruleset set -e true -r httpClient
+
+    - name: Update ESXi to version "{{ version }}"
+      command: esxcli software profile update -p "{{ version }}" -d https://hostupdate.vmware.com/software/VUM/PRODUCTION/main/vmw-depot-index.xml
+
+    - name: Enable firewall
+      command: esxcli network firewall ruleset set -e false -r httpClient
+
+    - name: Reboot ESXi
+      command: reboot now
