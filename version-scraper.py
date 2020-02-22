@@ -13,11 +13,11 @@ if __name__ == "__main__":
     versions = []
 
     soup = BeautifulSoup(response, "html.parser")
-    links = soup.find_all("a", text=True)
+    versions = soup.find_all("a", text=True)
 
-    for link in links:
+    for version in versions:
         
-        if re.match("ESXi-6.7.[1-20]-[0-9]{11}-standard", link.text):
-            versions.append(link.text)
+        if re.match("ESXi-6.7.[1-20]-[0-9]{11}-standard", version.text):
+            versions.append(version.text)
             
     print(versions[0])
