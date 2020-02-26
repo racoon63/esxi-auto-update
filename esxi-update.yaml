@@ -1,6 +1,4 @@
 ---
-hosts: esxi
----
 - name: Update esxi to latest version
   hosts: esxi
   gather_facts: no
